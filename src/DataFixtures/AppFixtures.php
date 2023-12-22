@@ -20,33 +20,9 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create("fr_FR");
-        
-        // Catégorie
-        $parentCategoriesName = ["Vêtement", "Linge de maison", "Chaussure et Accessoires"];
-        $subCategoriesName = ["Haut", "Bas", "Chausures", "Costume et Robe", "Accessoire", "Autres"];
-        $allCategories = [];
-        foreach($parentCategoriesName as $parentName) {
-            $mainCategory = new Category();
-            $mainCategory
-                ->setName($parentName);
-             
-                
-            $manager->persist($mainCategory);
-            $allCategories[]=$mainCategory;
 
-            foreach($subCategoriesName as $subCategoryName){
-                $subCategory = new Category();
-                $subCategory
-                    ->setName($subCategoryName)
-                    ->setParent($mainCategory);    
-                $manager->persist($subCategory); 
-                $allCategories[]=$subCategory;
-            }
-        }
-
-        // Produits
+    // poduits status
         $productStatusName = ["Nouveau", "Usagé", "Abîmé"];
-        $allProductStatus = [];
         foreach ($productStatusName as $statusName) {
             
             $status = new ProductStatus();
@@ -55,19 +31,50 @@ class AppFixtures extends Fixture
             $allProductStatus[]=$status;
         }
 
+    // Catégory
+        $mainCategories = [
+            "Vêtements" => [
+                "Haut" => ["Chemises", "T-shirts", "Pulls", "Vestes"],
+                "Bas" => ["Pantalons", "Jupes", "Shorts"],
+                "Costumes" => ["Ensemble complet", "Veste", "Pantalon", "Jupe"],
+                "Autres" => ["Robes", "Tenues de sport", "Vêtements d'extérieur"],
+            ],
+            "Linge de maison" => [
+                "Literie" => ["Draps", "Taies d'oreiller", "Housses de couette"],
+                "Serviettes" => ["Serviettes de bain", "Serviettes de cuisine"],
+                "Nappes" => ["Nappes", "Sets de table"],
+                "Rideaux" => ["Rideaux", "Stores"],
+            ],
+            "Chaussures et Accessoires" => [
+                "Chaussures" => ["Baskets", "Chaussures habillées", "Sandales"],
+                "Accessoires" => ["Sacs à main", "Chapeaux", "Ceintures"],
+            ],
+        ];
+        //   boucle catégorie parent
+        foreach($mainCategories as $mainCategoryName => $subCategories){
+            $mainCategory = new Category();
+            $mainCategory->setName($mainCategoryName);
+            $manager->persist($mainCategory);
+            //  boucle sous-catégorie
+            foreach($subCategories as $subCategoryName => $products){
+                $subCategory = new Category();
+                $subCategory->setName($subCategoryName);
+                $manager->persist($subCategory);
+            //  Produits
+                foreach($products as $productName){
+                    $product = new Product();
+                    $product
+                        ->setName($productName)
+                        ->setPrice($faker->randomFloat(2))
+                        ->setDescription($faker->paragraph())
+                        ->setProductStatus($faker->randomElement($allProductStatus));
+                    $subCategory->addProduct($product);
+                    $manager->persist($product);
+                }
+                $mainCategory->addChild($subCategory);
 
-        // $allCategories = $this->categoryRepository->findAll();
-        // var_dump($allCategories);
-
-        for($i=0; $i<self::NB_PRODUCT; $i++) {
-            $product = new Product();
-            $product
-                ->setName($faker->word())
-                ->setPrice($faker->randomFloat(2))
-                ->setDescription($faker->paragraph())
-                ->setProductStatus($faker->randomElement($allProductStatus))
-                ->setCategory($faker->randomElement($allCategories));
-            $manager->persist($product);
+            }
+            $manager->persist($mainCategory);
         }
         
         $manager->flush();
