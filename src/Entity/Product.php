@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,14 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ProductStatus $productStatus = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSelected::class)]
+    private Collection $productSelecteds;
+
+    public function __construct()
+    {
+        $this->productSelecteds = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,6 +103,36 @@ class Product
     public function setProductStatus(?ProductStatus $productStatus): static
     {
         $this->productStatus = $productStatus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductSelected>
+     */
+    public function getProductSelecteds(): Collection
+    {
+        return $this->productSelecteds;
+    }
+
+    public function addProductSelected(ProductSelected $productSelected): static
+    {
+        if (!$this->productSelecteds->contains($productSelected)) {
+            $this->productSelecteds->add($productSelected);
+            $productSelected->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductSelected(ProductSelected $productSelected): static
+    {
+        if ($this->productSelecteds->removeElement($productSelected)) {
+            // set the owning side to null (unless already changed)
+            if ($productSelected->getProduct() === $this) {
+                $productSelected->setProduct(null);
+            }
+        }
 
         return $this;
     }

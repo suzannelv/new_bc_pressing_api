@@ -29,7 +29,6 @@ class Category
     private Collection $products;
 
    
-
     public function __construct()
     {
         $this->child = new ArrayCollection();
