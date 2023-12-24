@@ -12,7 +12,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name:"discr", type:"string")]
-#[ORM\DiscriminatorMap(['user'=>User::class, 'client'=>Client::class])]
+#[ORM\DiscriminatorMap([
+    'user'=>User::class, 
+    'client'=>Client::class,
+    'employee'=>Employee::class
+    ])]
 #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -53,6 +57,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     protected ?string $profilUrl = null;
+
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ZipCode $zipCode = null;
 
     
 
@@ -206,6 +214,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfilUrl(?string $profilUrl): static
     {
         $this->profilUrl = $profilUrl;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?ZipCode
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(?ZipCode $zipCode): static
+    {
+        $this->zipCode = $zipCode;
 
         return $this;
     }
