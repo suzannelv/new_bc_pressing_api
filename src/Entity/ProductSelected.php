@@ -32,6 +32,10 @@ class ProductSelected
     #[ORM\ManyToMany(targetEntity: ServiceOption::class, inversedBy: 'product')]
     private Collection $serviceOptions;
 
+    #[ORM\ManyToOne(inversedBy: 'productSelected')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?OrderDetail $orderDetail = null;
+
     public function __construct()
     {
         $this->serviceOptions = new ArrayCollection();
@@ -102,6 +106,18 @@ class ProductSelected
         if ($this->serviceOptions->removeElement($serviceOption)) {
             $serviceOption->removeProduct($this);
         }
+
+        return $this;
+    }
+
+    public function getOrderDetail(): ?OrderDetail
+    {
+        return $this->orderDetail;
+    }
+
+    public function setOrderDetail(?OrderDetail $orderDetail): static
+    {
+        $this->orderDetail = $orderDetail;
 
         return $this;
     }

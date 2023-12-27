@@ -10,10 +10,11 @@ use App\Entity\ProductStatus;
 use App\Entity\ServiceOption;
 use App\Utils\PriceCalculator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements DependentFixtureInterface
 {
 
     private const NB_PRODUCT = 10;
@@ -166,9 +167,13 @@ class AppFixtures extends Fixture
         // produits sélectionnés
         $priceCalculator = new PriceCalculator();
         
+        
+        $orderDetail = $this->getReference(UserFixtures::ORDER_DETAIL);
+        
         $productSelected = new ProductSelected();
         $productSelected->setProduct($product)
-                        ->setMaterial($faker->randomElement($allMaterials));
+                        ->setMaterial($faker->randomElement($allMaterials))
+                        ->setOrderDetail($orderDetail);
                      
         $nbServices = $faker->numberBetween(1, 3);
         $servicesSelected = [];
@@ -187,6 +192,12 @@ class AppFixtures extends Fixture
         $manager->persist($productSelected);
 
         $manager->flush();
+    }
+
+    public function getDependencies(){
+        return [
+          UserFixtures::class,
+        ];
     }
 
 }

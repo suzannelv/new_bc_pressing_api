@@ -3,23 +3,24 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\EmployeeRepository;
+use App\Repository\PaymentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EmployeeRepository::class)]
+#[ORM\Entity(repositoryClass: PaymentRepository::class)]
 #[ApiResource]
-class Employee extends User
+class Payment
 {
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $empNumber = null;
+    private ?string $method = null;
 
-    #[ORM\Column]
-    private ?bool $adminRole = null;
-
-    #[ORM\OneToMany(mappedBy: 'emp', targetEntity: OrderDetail::class)]
+    #[ORM\OneToMany(mappedBy: 'payment', targetEntity: OrderDetail::class)]
     private Collection $orderDetails;
 
     public function __construct()
@@ -27,26 +28,19 @@ class Employee extends User
         $this->orderDetails = new ArrayCollection();
     }
 
-    public function getEmpNumber(): ?string
+    public function getId(): ?int
     {
-        return $this->empNumber;
+        return $this->id;
     }
 
-    public function setEmpNumber(string $empNumber): static
+    public function getMethod(): ?string
     {
-        $this->empNumber = $empNumber;
-
-        return $this;
+        return $this->method;
     }
 
-    public function isAdminRole(): ?bool
+    public function setMethod(string $method): static
     {
-        return $this->adminRole;
-    }
-
-    public function setAdminRole(bool $adminRole): static
-    {
-        $this->adminRole = $adminRole;
+        $this->method = $method;
 
         return $this;
     }
@@ -63,7 +57,7 @@ class Employee extends User
     {
         if (!$this->orderDetails->contains($orderDetail)) {
             $this->orderDetails->add($orderDetail);
-            $orderDetail->setEmp($this);
+            $orderDetail->setPayment($this);
         }
 
         return $this;
@@ -73,8 +67,8 @@ class Employee extends User
     {
         if ($this->orderDetails->removeElement($orderDetail)) {
             // set the owning side to null (unless already changed)
-            if ($orderDetail->getEmp() === $this) {
-                $orderDetail->setEmp(null);
+            if ($orderDetail->getPayment() === $this) {
+                $orderDetail->setPayment(null);
             }
         }
 

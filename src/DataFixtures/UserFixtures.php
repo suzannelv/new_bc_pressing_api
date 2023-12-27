@@ -4,6 +4,10 @@
 namespace App\DataFixtures;
 use App\Entity\Client;
 use App\Entity\Country;
+use App\Entity\Employee;
+use App\Entity\OrderDetail;
+use App\Entity\OrderStatus;
+use App\Entity\Payment;
 use App\Entity\ZipCode;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -13,7 +17,10 @@ use Faker\Factory;
 class UserFixtures extends Fixture
 {
   private const NB_ZIPCODE = 5;
+  private const NB_CLIENT = 20; 
   private const NB_EMP = 6;
+  private const NB_PAY_METHODE = 3;
+  public const ORDER_DETAIL='orderDetail';
   public function load(ObjectManager $manager):void
   {
 
@@ -34,25 +41,85 @@ class UserFixtures extends Fixture
       $zipCodes[]=$zipCode;
     }
     // clients
-    $client = new Client();
-    $client->setEmail('test@gmail.com')
+    $clients = [];
+    for($i = 0; $i<self::NB_CLIENT; $i++){
+      $client = new Client();
+      $client->setEmail($faker->email())
            ->setPassword("123456")
-           ->setFirstname("Daniel")
-           ->setLastname('Griffin')
-           ->setBirthday(DateTimeImmutable::createFromFormat('d-m-Y', '01-01-1990'))
+           ->setFirstname($faker->firstName())
+           ->setLastname($faker->lastName())
+           ->setBirthday($faker->dateTimeBetween('-30 years', 'now'))
            ->setPhoneNumber('0666666666')
            ->setAdress($faker->address())
-           ->setCreatedAt(DateTimeImmutable::createFromFormat('d-m-Y', '01-01-2022'))
+           ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-3 years')))
            ->setMembership(true)
            ->setZipCode($faker->randomElement($zipCodes));
-    $manager->persist($client);
-
-    // employées
+      $manager->persist($client);
+      $clients[]=$client;
+    }
     
 
+    // employées
+    $emps = [];
+    for($i=0; $i<self::NB_EMP; $i++){
+      $emp = new Employee();
+      $emp->setEmail($faker->email())
+          ->setPassword("123456")
+          ->setFirstname($faker->firstName())
+          ->setLastname($faker->lastName())
+          ->setBirthday($faker->dateTimeBetween('-30 years', 'now'))
+          ->setPhoneNumber('0666666666')
+          ->setAdress($faker->address())
+          ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-5 years')))
+          ->setEmpNumber($faker->numerify('emp-######'))
+          ->setAdminRole($faker->boolean(10))
+          ->setZipCode($faker->randomElement($zipCodes));
+      $manager->persist($emp);
+      $emps[]=$emp;
+    }
+
+    // mode de payment
+    $paymentMethods = [];
+    for($i=0;$i<self::NB_PAY_METHODE; $i++){
+       $payment = new Payment();
+
+       $payment->setMethod($faker->creditCardType());
+       $manager->persist($payment);
+       $paymentMethods[]=$payment;
+    }
+
+    // status de commande
+
+    $orderStatusNames = ["En attente de traitement", "En cours de traitement", "En attente de paiement", "Prête pour la collecte", "En cours de livraison", "Livré", "Annulé"];
+    $orderStatusList = [];
+    foreach($orderStatusNames as $statusName){
+      $orderStatus= new OrderStatus();
+      $orderStatus->setStatus($statusName);
+
+      $manager->persist($orderStatus);
+      $orderStatusList[]=$orderStatus;
+
+    }
+
+
+    // commande info
+    $orderDetail = new OrderDetail();
+    $orderDetail->setOrderNumber($faker->regexify('[A-Z]{5}[0-4]{3}'))
+                ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-3 week', 'now')))
+                ->setDelivery(true)
+                ->setDepositDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 week', 'now')))
+                ->setRetrieveDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('now','+1 week')))
+                ->setPayment($faker->randomElement($paymentMethods))
+                ->setEmp($faker->randomElement($emps))
+                ->setClient($faker->randomElement($clients))
+                ->setOrderStatus($faker->randomElement($orderStatusList));
+                
+
     $manager->flush();
+    $this->addReference(self::ORDER_DETAIL, $orderDetail);
+
 
   }
 
   
-}
+} 
