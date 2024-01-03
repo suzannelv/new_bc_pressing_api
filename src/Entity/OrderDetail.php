@@ -202,27 +202,27 @@ class OrderDetail
     /**
      * @return Collection<int, ProductSelected>
      */
-    public function getProuctSelected(): Collection
+    public function getProductSelected(): Collection
     {
         return $this->productSelected;
     }
 
-    public function addProuctSelected(ProductSelected $prouctSelected): static
+    public function addProductSelected(ProductSelected $productSelected): static
     {
-        if (!$this->productSelected->contains($prouctSelected)) {
-            $this->productSelected->add($prouctSelected);
-            $prouctSelected->setOrderDetail($this);
+        if (!$this->productSelected->contains($productSelected)) {
+            $this->productSelected->add($productSelected);
+            $productSelected->setOrderDetail($this);
         }
 
         return $this;
     }
 
-    public function removeProuctSelected(ProductSelected $prouctSelected): static
+    public function removeProductSelected(ProductSelected $productSelected): static
     {
-        if ($this->productSelected->removeElement($prouctSelected)) {
+        if ($this->productSelected->removeElement($productSelected)) {
             // set the owning side to null (unless already changed)
-            if ($prouctSelected->getOrderDetail() === $this) {
-                $prouctSelected->setOrderDetail(null);
+            if ($productSelected->getOrderDetail() === $this) {
+                $productSelected->setOrderDetail(null);
             }
         }
 
