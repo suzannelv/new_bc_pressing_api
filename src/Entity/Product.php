@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +13,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext:['groups'=>['products:read']],
+    operations:[
+        new GetCollection(),
+        new Get()
+
+    ]
+    )]
 class Product
 {
     #[ORM\Id]
@@ -43,7 +52,6 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['products:read'])]
-
     private ?ProductStatus $productStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSelected::class)]
