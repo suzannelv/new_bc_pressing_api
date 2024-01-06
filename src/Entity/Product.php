@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource]
@@ -16,22 +17,33 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['products:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['products:read'])]
+
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
+    #[Groups(['products:read'])]
+
     private ?Category $category = null;
 
     #[ORM\Column]
+    #[Groups(['products:read'])]
+
     private ?float $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['products:read'])]
+
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['products:read'])]
+
     private ?ProductStatus $productStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSelected::class)]
