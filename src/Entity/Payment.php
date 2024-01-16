@@ -7,6 +7,7 @@ use App\Repository\PaymentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
 #[ApiResource]
@@ -15,9 +16,11 @@ class Payment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["order:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["order:read"])]
     private ?string $method = null;
 
     #[ORM\OneToMany(mappedBy: 'payment', targetEntity: OrderDetail::class)]

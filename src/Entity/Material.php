@@ -7,6 +7,7 @@ use App\Repository\MaterialRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MaterialRepository::class)]
 #[ApiResource]
@@ -15,12 +16,15 @@ class Material
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['productSelected:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['productSelected:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['productSelected:read'])]
     private ?float $coefficentPrice = null;
 
     #[ORM\OneToMany(mappedBy: 'material', targetEntity: ProductSelected::class)]

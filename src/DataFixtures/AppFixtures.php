@@ -18,23 +18,24 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 {
 
     private const NB_PRODUCT = 10;
-    
+    private const NB_PRODUCT_SELECTED = 10;
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create("fr_FR");
 
-    // poduits status
+        // poduits status
         $productStatusName = ["Nouveau", "Usagé", "Abîmé"];
         $allProductStatus = [];
         foreach ($productStatusName as $statusName) {
-            
+
             $status = new ProductStatus();
             $status->setStatusName($statusName);
             $manager->persist($status);
-            $allProductStatus[]=$status;
+            $allProductStatus[] = $status;
         }
 
-    // Catégory
+        // Catégory
         $mainCategories = [
             "Vêtements" => [
                 "Haut" => ["Chemises", "T-shirts", "Pulls", "Vestes"],
@@ -54,17 +55,18 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             ],
         ];
         //   boucle catégorie parent
-        foreach($mainCategories as $mainCategoryName => $subCategories){
+        $dbProducts=[];
+        foreach ($mainCategories as $mainCategoryName => $subCategories) {
             $mainCategory = new Category();
             $mainCategory->setName($mainCategoryName);
             $manager->persist($mainCategory);
             //  boucle sous-catégorie
-            foreach($subCategories as $subCategoryName => $products){
+            foreach ($subCategories as $subCategoryName => $products) {
                 $subCategory = new Category();
                 $subCategory->setName($subCategoryName);
                 $manager->persist($subCategory);
-            //  Produits
-                foreach($products as $productName){
+                //  Produits
+                foreach ($products as $productName) {
                     $product = new Product();
                     $product
                         ->setName($productName)
@@ -73,130 +75,141 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                         ->setProductStatus($faker->randomElement($allProductStatus));
                     $subCategory->addProduct($product);
                     $manager->persist($product);
+                    $dbProducts[]=$product;
                 }
                 $mainCategory->addChild($subCategory);
 
             }
             $manager->persist($mainCategory);
         }
-        
+
         // matériel
 
-        $materialInfos=[
+        $materialInfos = [
             [
-                "name"=>"Coton",
-                "coefficentPrice"=>0.1
+                "name" => "Coton",
+                "coefficentPrice" => 0.1
             ],
             [
-                "name"=>"Lin",
-                "coefficentPrice"=>0.2
-            ],  
+                "name" => "Lin",
+                "coefficentPrice" => 0.2
+            ],
             [
-                "name"=>"Laine",
-                "coefficentPrice"=>0.3
-            ],  
+                "name" => "Laine",
+                "coefficentPrice" => 0.3
+            ],
             [
-                "name"=>"Polytester",
-                "coefficentPrice"=>0.1
-            ],  
+                "name" => "Polytester",
+                "coefficentPrice" => 0.1
+            ],
             [
-                "name"=>"Soie",
-                "coefficentPrice"=>0.5
-            ],  
+                "name" => "Soie",
+                "coefficentPrice" => 0.5
+            ],
             [
-                "name"=>"Denim",
-                "coefficentPrice"=>0.2
+                "name" => "Denim",
+                "coefficentPrice" => 0.2
             ],
 
         ];
-        $allMaterials=[];
-        foreach($materialInfos as $materialInfo) {
+        $allMaterials = [];
+        foreach ($materialInfos as $materialInfo) {
             $material = new Material();
             $material->setName($materialInfo["name"])
-                     ->setCoefficentPrice($materialInfo['coefficentPrice']);
-            
-            $allMaterials[]=$material;
+            ->setCoefficentPrice($materialInfo['coefficentPrice']);
 
+            
             $manager->persist($material);
             
+            $allMaterials[] = $material;
         }
 
         //service options
 
-        $serviceInfos =[
+        $serviceInfos = [
             [
-                "name"=>"Lavage",
-                "coefficentPrice"=>0.1
+                "name" => "Lavage",
+                "coefficentPrice" => 0.1
             ],
             [
-                "name"=>"Repassage",
-                "coefficentPrice"=>0.1
-            ],  
-            [
-                "name"=>"Nettoyage à sec",
-                "coefficentPrice"=>0.3
-            ],  
-            [
-                "name"=>"Blanchiment",
-                "coefficentPrice"=>0.1
-            ],  
-            [
-                "name"=>"Détachement ",
-                "coefficentPrice"=>0.2
-            ],  
-            [
-                "name"=>"Retouche",
-                "coefficentPrice"=>0.2
+                "name" => "Repassage",
+                "coefficentPrice" => 0.1
             ],
             [
-                "name"=>"entretien spécial",
-                "coefficentPrice"=>0.3
+                "name" => "Nettoyage à sec",
+                "coefficentPrice" => 0.3
+            ],
+            [
+                "name" => "Blanchiment",
+                "coefficentPrice" => 0.1
+            ],
+            [
+                "name" => "Détachement ",
+                "coefficentPrice" => 0.2
+            ],
+            [
+                "name" => "Retouche",
+                "coefficentPrice" => 0.2
+            ],
+            [
+                "name" => "entretien spécial",
+                "coefficentPrice" => 0.3
             ],
         ];
 
-        $allServices=[];
-        foreach($serviceInfos as $service){
+        $allServices = [];
+        foreach ($serviceInfos as $service) {
             $serviceOption = new ServiceOption();
             $serviceOption->setName($service["name"])
-                          ->setCoefficentPrice($service["coefficentPrice"]);
-            
+                ->setCoefficentPrice($service["coefficentPrice"]);
+
             $manager->persist($serviceOption);
-            $allServices[]=$serviceOption;
+            $allServices[] = $serviceOption;
         }
 
         // produits sélectionnés
         $priceCalculator = new PriceCalculator();
-        
-        
-        $orderDetail = $this->getReference(UserFixtures::ORDER_DETAIL);
-        
-        $productSelected = new ProductSelected();
-        $productSelected->setProduct($product)
-                        ->setMaterial($faker->randomElement($allMaterials))
-                        ->setOrderDetail($orderDetail);
-                     
-        $nbServices = $faker->numberBetween(1, 3);
-        $servicesSelected = [];
-        for($i=0; $i<$nbServices; $i++){
-          $servicesSelected[] = $faker->randomElement($allServices);
-            
+
+        $orderDetails = [];
+        for ($i = 0; $i < UserFixtures::NB_ORDERS; $i++) {
+            $orderDetails[] = $this->getReference(UserFixtures::ORDER_DETAIL_PREFIX . $i);
         }
 
-        $totalPrice = $priceCalculator->calculateTotalPrice($product, $servicesSelected);
-        $productSelected->setTotalPrice($totalPrice);
+        $allProductSelected = [];
+        for ($i = 0; $i < self::NB_PRODUCT_SELECTED; $i++) {
+            $productSelected = new ProductSelected();
+            $product = $faker->randomElement($dbProducts);
+            $productSelected->setProduct($product)
+                ->setMaterial($faker->randomElement($allMaterials))
+                ->setOrderDetail($faker->randomElement($orderDetails))
+                ->setQuantity($faker->numberBetween(0, 7));
 
-        foreach($servicesSelected as $service) {
-            $productSelected->addServiceOption($service);
-            $manager->persist($service);
+            $nbServices = $faker->numberBetween(1, 3);
+            $servicesSelected = [];
+            for ($j = 0; $j < $nbServices; $j++) {
+                $servicesSelected[] = $faker->randomElement($allServices);
+
+            }
+
+            $totalPrice = $priceCalculator->calculateTotalPrice($product, $servicesSelected);
+            $productSelected->setTotalPrice($totalPrice);
+
+            foreach ($servicesSelected as $service) {
+                $productSelected->addServiceOption($service);
+                $manager->persist($service);
+            }
+            $manager->persist($productSelected);
+            $allProductSelected[] = $productSelected;
         }
-        $manager->persist($productSelected);
+
 
         $manager->flush();
     }
 
-    public function getDependencies(){
+    public function getDependencies()
+    {
         return [
-          UserFixtures::class,
+            UserFixtures::class,
         ];
     }
 

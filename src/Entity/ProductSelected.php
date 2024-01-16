@@ -7,34 +7,45 @@ use App\Repository\ProductSelectedRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProductSelectedRepository::class)]
-#[ApiResource]
+#[ApiResource(normalizationContext:['groups'=>['productSelected:read']])]
 class ProductSelected
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['productSelected:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productSelecteds')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['productSelected:read'])]
     private ?Product $product = null;
 
 
     #[ORM\ManyToOne(inversedBy: 'productSelecteds')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['productSelected:read'])]
     private ?Material $material = null;
 
     #[ORM\Column]
+    #[Groups(['productSelected:read'])]
+
     private ?float $totalPrice = null;
 
     #[ORM\ManyToMany(targetEntity: ServiceOption::class, inversedBy: 'product')]
+    #[Groups(['productSelected:read'])]
+
     private Collection $serviceOptions;
 
     #[ORM\ManyToOne(inversedBy: 'productSelected')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['productSelected:read'])]
     private ?OrderDetail $orderDetail = null;
+
+    #[ORM\Column]
+    private ?int $quantity = null;
 
     public function __construct()
     {
@@ -118,6 +129,18 @@ class ProductSelected
     public function setOrderDetail(?OrderDetail $orderDetail): static
     {
         $this->orderDetail = $orderDetail;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): static
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

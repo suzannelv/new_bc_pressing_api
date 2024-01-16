@@ -26,32 +26,35 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['products:read'])]
+    #[Groups(['products:read', 'productSelected:read'])]
+  
+
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['products:read'])]
+    #[Groups(['products:read', 'productSelected:read'])]
 
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    #[Groups(['products:read'])]
+    #[Groups(['products:read', 'productSelected:read'])]
 
     private ?Category $category = null;
 
     #[ORM\Column]
-    #[Groups(['products:read'])]
-
+    #[Groups(['products:read', 'productSelected:read'])]
+   
     private ?float $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['products:read'])]
+    #[Groups(['products:read', 'productSelected:read'])]
 
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['products:read'])]
+    #[Groups(['products:read', 'productSelected:read'])]
+
     private ?ProductStatus $productStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSelected::class)]

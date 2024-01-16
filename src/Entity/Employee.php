@@ -7,6 +7,7 @@ use App\Repository\EmployeeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[ApiResource]
@@ -14,9 +15,11 @@ class Employee extends User
 {
 
     #[ORM\Column(length: 255)]
+    #[Groups(["order:read"])]
     private ?string $empNumber = null;
 
     #[ORM\Column]
+    #[Groups(["order:read"])]
     private ?bool $adminRole = null;
 
     #[ORM\OneToMany(mappedBy: 'emp', targetEntity: OrderDetail::class)]

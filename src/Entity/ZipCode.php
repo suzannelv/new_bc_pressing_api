@@ -7,6 +7,7 @@ use App\Repository\ZipCodeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ZipCodeRepository::class)]
 #[ApiResource]
@@ -15,16 +16,20 @@ class ZipCode
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["order:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 5)]
+    #[Groups(["order:read"])]
     private ?string $zipCode = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["order:read"])]
     private ?string $city = null;
 
     #[ORM\ManyToOne(inversedBy: 'zipCodes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["order:read"])]
     private ?Country $country = null;
 
     #[ORM\OneToMany(mappedBy: 'zipCode', targetEntity: User::class)]

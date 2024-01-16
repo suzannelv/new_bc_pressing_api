@@ -8,50 +8,68 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
-#[ApiResource]
+#[ApiResource(normalizationContext:["groups"=>["order:read"]])]
 class OrderDetail
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['productSelected:read', "order:read"])]
+
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['productSelected:read', "order:read"])]
+
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(["order:read"])]
+
     private ?string $comment = null;
 
     #[ORM\Column]
+    #[Groups(['productSelected:read', "order:read"])]
+
     private ?bool $delivery = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['productSelected:read', "order:read"])]
     private ?\DateTimeInterface $depositDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['productSelected:read', "order:read"])]
+
     private ?\DateTimeInterface $retrieveDate = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['productSelected:read', "order:read"])]
     private ?string $orderNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["order:read"])]
     private ?string $codePromo = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
+    #[Groups(["order:read"])]
     private ?Client $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["order:read"])]
     private ?Employee $emp = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["order:read"])]
     private ?Payment $payment = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["order:read"])]
     private ?OrderStatus $orderStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'orderDetail', targetEntity: ProductSelected::class)]

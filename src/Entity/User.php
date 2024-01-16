@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields:['email'], message:"Cet email existe déjà!")]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name:"discr", type:"string")]
 #[ORM\DiscriminatorMap([
@@ -18,17 +23,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
     'employee'=>Employee::class
     ])]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties:['email'=>'ipartial'] )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["order:read"])]
+
     protected ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["order:read"])]
     protected ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["order:read"])]
     protected array $roles = [];
 
     /**
@@ -38,18 +48,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["order:read"])]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["order:read"])]
     protected ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     protected ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(["order:read"])]
+
     protected ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["order:read"])]
     protected ?string $adress = null;
 
     #[ORM\Column]
@@ -60,6 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(["order:read"])]
     private ?ZipCode $zipCode = null;
 
     
