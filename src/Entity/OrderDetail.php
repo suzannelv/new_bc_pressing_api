@@ -18,17 +18,14 @@ class OrderDetail
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['productSelected:read', "order:read"])]
-
     private ?int $id = null;
 
     #[ORM\Column]
     #[Groups(['productSelected:read', "order:read"])]
-
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(["order:read"])]
-
     private ?string $comment = null;
 
     #[ORM\Column]

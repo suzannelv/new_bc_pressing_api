@@ -16,20 +16,20 @@ class ZipCode
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["order:read"])]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 5)]
-    #[Groups(["order:read"])]
+ 
     private ?string $zipCode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read"])]
+
     private ?string $city = null;
 
     #[ORM\ManyToOne(inversedBy: 'zipCodes')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["order:read"])]
+
     private ?Country $country = null;
 
     #[ORM\OneToMany(mappedBy: 'zipCode', targetEntity: User::class)]

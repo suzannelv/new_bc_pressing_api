@@ -5,20 +5,31 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use App\Controller\UploadAction;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
+
+
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
     normalizationContext:['groups'=>['products:read']],
-    operations:[
+    
+    operations: [
+        new Get(),
         new GetCollection(),
-        new Get()
-
+        new Post(
+            controller: UploadAction::class, 
+            deserialize: false, 
+        )
     ]
     )]
 class Product
@@ -27,38 +38,41 @@ class Product
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['products:read', 'productSelected:read'])]
-  
-
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['products:read', 'productSelected:read'])]
-
     private ?string $name = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[Groups(['products:read', 'productSelected:read'])]
-
     private ?Category $category = null;
 
     #[ORM\Column]
     #[Groups(['products:read', 'productSelected:read'])]
-   
     private ?float $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['products:read', 'productSelected:read'])]
-
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'product')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['products:read', 'productSelected:read'])]
-
     private ?ProductStatus $productStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSelected::class)]
     private Collection $productSelecteds;
+
+    #[Groups(['products:read'])]
+    public ?string $contentUrl = null;
+
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imagePath')]
+    public ?File $imageFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['products:read', 'productSelected:read'])]
+    private ?string $imagePath = null;
 
     public function __construct()
     {
@@ -159,4 +173,22 @@ class Product
 
         return $this;
     }
+
+    public function getImagePath(): ?string
+    {
+        return $this->imagePath;
+    }
+
+    public function setImagePath(?string $imagePath): static
+    {
+        $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
 }

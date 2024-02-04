@@ -54,7 +54,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                 "Accessoires" => ["Sacs à main", "Chapeaux", "Ceintures"],
             ],
         ];
-        //   boucle catégorie parent
+        // boucle catégorie parent
         $dbProducts=[];
         foreach ($mainCategories as $mainCategoryName => $subCategories) {
             $mainCategory = new Category();
@@ -72,7 +72,8 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                         ->setName($productName)
                         ->setPrice($faker->randomFloat(2))
                         ->setDescription($faker->paragraph())
-                        ->setProductStatus($faker->randomElement($allProductStatus));
+                        ->setProductStatus($faker->randomElement($allProductStatus))
+                        ->setImagePath("../../public/uploads/products/xiaoxin.jpg");
                     $subCategory->addProduct($product);
                     $manager->persist($product);
                     $dbProducts[]=$product;
