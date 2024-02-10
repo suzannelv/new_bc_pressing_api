@@ -14,12 +14,15 @@ use Symfony\Component\Serializer\Attribute\Groups;
 class Client extends User
 {
     
-    #[ORM\Column]
+  
+    #[ORM\Column(length: 255)]
     #[Groups(["order:read"])]
-    private ?bool $membership = null;
+     private ?string $clientNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: OrderDetail::class)]
     private Collection $orderDetails;
+
+  
 
     public function __construct()
     {
@@ -27,18 +30,7 @@ class Client extends User
     }
 
    
-    public function isMembership(): ?bool
-    {
-        return $this->membership;
-    }
-
-    public function setMembership(bool $membership): static
-    {
-        $this->membership = $membership;
-
-        return $this;
-    }
-
+    
     /**
      * @return Collection<int, OrderDetail>
      */
@@ -65,6 +57,18 @@ class Client extends User
                 $orderDetail->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClientNumber(): ?string
+    {
+        return $this->clientNumber;
+    }
+
+    public function setClientNumber(string $clientNumber): static
+    {
+        $this->clientNumber = $clientNumber;
 
         return $this;
     }

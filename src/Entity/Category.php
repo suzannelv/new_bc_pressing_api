@@ -17,12 +17,10 @@ class Category
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['products:read', 'productSelected:read'])]
-
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['products:read', 'productSelected:read'])]
-
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'child')]

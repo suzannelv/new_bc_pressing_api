@@ -29,53 +29,55 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
 
     protected ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
     protected ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
     protected array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(["user:read"])]
     protected ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
     protected ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     protected ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(["order:read"])]
-
+    #[Groups(["order:read", "user:read"])]
     protected ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
     protected ?string $adress = null;
 
     #[ORM\Column]
+    #[Groups(["user:read"])]
     protected ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["user:read"])]
     protected ?string $profilUrl = null;
 
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "user:read"])]
     private ?ZipCode $zipCode = null;
 
     

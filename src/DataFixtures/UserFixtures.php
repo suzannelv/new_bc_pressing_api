@@ -54,7 +54,7 @@ class UserFixtures extends Fixture
         ->setPhoneNumber('0666666666')
         ->setAdress($faker->address())
         ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-3 years')))
-        ->setMembership(true)
+        ->setClientNumber($faker->numerify('clt-######'))
         ->setZipCode($faker->randomElement($zipCodes));
       $manager->persist($client);
       $clients[] = $client;
