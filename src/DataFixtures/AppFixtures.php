@@ -426,10 +426,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
                 "name" => "Retouche",
                 "coefficentPrice" => 0.2
             ],
-            [
-                "name" => "Entretien spécial",
-                "coefficentPrice" => 0.3
-            ],
+         
         ];
 
         $allServices = [];
