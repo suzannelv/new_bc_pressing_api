@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductStatusRepository;
-use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;

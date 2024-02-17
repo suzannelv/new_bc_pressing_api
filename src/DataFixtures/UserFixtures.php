@@ -33,19 +33,52 @@ class UserFixtures extends Fixture
     $manager->persist($country);
 
     // code postale et ville
+    // $zipCodes = [];
+    // for ($i = 0; $i < self::NB_ZIPCODE; $i++) {
+    //   $zipCode = new ZipCode();
+    //   $zipCode->setCity($faker->city())
+    //     ->setZipCode($faker->postcode())
+    //     ->setCountry($country);
+    //   $manager->persist($zipCode);
+    //   $zipCodes[] = $zipCode;
+    // }
+
+    $zipCodesData = [
+      ['city'=> 'Lyon', 'zipCode'=>'69001'],
+      ['city'=> 'Lyon', 'zipCode'=>'69002'],
+      ['city'=> 'Lyon', 'zipCode'=>'69003'],
+      ['city'=> 'Lyon', 'zipCode'=>'69004'],
+      ['city'=> 'Lyon', 'zipCode'=>'69005'],
+      ['city'=> 'Lyon', 'zipCode'=>'69006'],
+      ['city'=> 'Lyon', 'zipCode'=>'69007'],
+      ['city'=> 'Lyon', 'zipCode'=>'69008'],
+      ['city'=> 'Lyon', 'zipCode'=>'69009'],
+      ['city'=> 'Villeurbanne', 'zipCode'=>'69100'],
+      ['city'=> 'Vaulx-en-Velin', 'zipCode'=>'69120'],
+      ['city'=> 'Écully', 'zipCode'=>'69130'],
+      ['city'=> 'Bron', 'zipCode'=>'69500'],
+      ['city'=> 'Tassin-la-Demi-Lune', 'zipCode'=>'69160'],
+      ['city'=> 'Décine-Charpieu', 'zipCode'=>'69275'],
+      ['city'=> 'Vénissieux', 'zipCode'=>'69275'],
+      ['city'=> 'Caluire-et-Cuire ', 'zipCode'=>'69034'],
+    ];
+
     $zipCodes = [];
-    for ($i = 0; $i < self::NB_ZIPCODE; $i++) {
+    foreach($zipCodesData as $data) {
       $zipCode = new ZipCode();
-      $zipCode->setCity($faker->city())
-        ->setZipCode($faker->postcode())
-        ->setCountry($country);
+      $zipCode ->setZipCode($data['zipCode'])
+               ->setCity($data['city'])
+               ->setCountry($country);
       $manager->persist($zipCode);
-      $zipCodes[] = $zipCode;
+      
+      $zipCodes[] = $zipCode; 
     }
+
     // clients
     $clients = [];
     for ($i = 0; $i < self::NB_CLIENT; $i++) {
       $client = new Client();
+      $randomZipCode = $faker->randomElement($zipCodes);
       $client->setEmail($faker->email())
         ->setPassword("123456")
         ->setFirstname($faker->firstName())
@@ -55,7 +88,7 @@ class UserFixtures extends Fixture
         ->setAdress($faker->address())
         ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-3 years')))
         ->setClientNumber($faker->numerify('clt-######'))
-        ->setZipCode($faker->randomElement($zipCodes));
+        ->setZipCode($randomZipCode);
       $manager->persist($client);
       $clients[] = $client;
     }
@@ -65,6 +98,7 @@ class UserFixtures extends Fixture
     $emps = [];
     for ($i = 0; $i < self::NB_EMP; $i++) {
       $emp = new Employee();
+      $randomZipCode = $faker->randomElement($zipCodes);
       $emp->setEmail($faker->email())
         ->setPassword("123456")
         ->setFirstname($faker->firstName())
@@ -75,7 +109,7 @@ class UserFixtures extends Fixture
         ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-5 years')))
         ->setEmpNumber($faker->numerify('emp-######'))
         ->setAdminRole($faker->boolean(10))
-        ->setZipCode($faker->randomElement($zipCodes));
+        ->setZipCode($randomZipCode);
       $manager->persist($emp);
       $emps[] = $emp;
     }

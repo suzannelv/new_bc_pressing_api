@@ -13,6 +13,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields:['email'], message:"Cet email existe déjà!")]
 #[ORM\InheritanceType("JOINED")]
@@ -26,6 +27,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiFilter(SearchFilter::class, properties:['email'=>'ipartial'] )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public ?string $zipCodeValue = null;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(["order:read", "user:read"])]
+    
     protected ?string $email = null;
 
     #[ORM\Column]
@@ -79,8 +83,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(["order:read", "user:read"])]
     private ?ZipCode $zipCode = null;
-
-    
 
     public function getId(): ?int
     {
