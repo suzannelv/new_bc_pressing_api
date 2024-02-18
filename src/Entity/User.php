@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'client'=>Client::class,
     'employee'=>Employee::class
     ])]
-#[ApiResource]
+#[ApiResource( normalizationContext: ['groups' => ['user:read']])]
 #[ApiFilter(SearchFilter::class, properties:['email'=>'ipartial'] )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -60,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["order:read", "user:read"])]
     protected ?string $lastname = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable:true)]
     protected ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(length: 10)]

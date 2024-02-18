@@ -13,8 +13,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource]
 class Client extends User
 {
-    
-  
+
     #[ORM\Column(length: 255)]
     #[Groups(["order:read"])]
      private ?string $clientNumber = null;
@@ -29,8 +28,7 @@ class Client extends User
         $this->orderDetails = new ArrayCollection();
     }
 
-   
-    
+
     /**
      * @return Collection<int, OrderDetail>
      */
