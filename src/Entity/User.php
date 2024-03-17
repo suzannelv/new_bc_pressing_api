@@ -23,22 +23,20 @@ use Symfony\Component\Serializer\Attribute\Groups;
     'client'=>Client::class,
     'employee'=>Employee::class
     ])]
-#[ApiResource( normalizationContext: ['groups' => ['user:read']])]
+#[ApiResource( normalizationContext: ['groups' => ['user:read', 'client:me']])]
 #[ApiFilter(SearchFilter::class, properties:['email'=>'ipartial'] )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public ?string $zipCodeValue = null;
-
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["order:read", "user:read"])]
-
+    #[Groups(["order:read", "user:read", "client:me"])]
     protected ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["order:read", "user:read"])]
-    
+    #[Groups(["order:read", "user:read", "client:me"])] 
     protected ?string $email = null;
 
     #[ORM\Column]
@@ -53,22 +51,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     protected ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read", "user:read"])]
+    #[Groups(["order:read", "user:read", "client:me"])]
     protected ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read", "user:read"])]
+    #[Groups(["order:read", "user:read", "client:me"])]
     protected ?string $lastname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable:true)]
     protected ?\DateTimeInterface $birthday = null;
 
     #[ORM\Column(length: 10)]
-    #[Groups(["order:read", "user:read"])]
+    #[Groups(["order:read", "user:read", "client:me"])]
     protected ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["order:read", "user:read"])]
+    #[Groups(["order:read", "user:read", "client:me"])]
     protected ?string $adress = null;
 
     #[ORM\Column]
@@ -81,7 +79,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["order:read", "user:read"])]
+    #[Groups(["order:read", "user:read", "client:me"])]
     private ?ZipCode $zipCode = null;
 
     public function getId(): ?int

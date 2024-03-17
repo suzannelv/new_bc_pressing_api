@@ -33,16 +33,7 @@ class UserFixtures extends Fixture
     $manager->persist($country);
 
     // code postale et ville
-    // $zipCodes = [];
-    // for ($i = 0; $i < self::NB_ZIPCODE; $i++) {
-    //   $zipCode = new ZipCode();
-    //   $zipCode->setCity($faker->city())
-    //     ->setZipCode($faker->postcode())
-    //     ->setCountry($country);
-    //   $manager->persist($zipCode);
-    //   $zipCodes[] = $zipCode;
-    // }
-
+ 
     $zipCodesData = [
       ['city'=> 'Lyon', 'zipCode'=>'69001'],
       ['city'=> 'Lyon', 'zipCode'=>'69002'],
@@ -115,15 +106,23 @@ class UserFixtures extends Fixture
     }
 
     // mode de payment
-    $paymentMethods = [];
-    for ($i = 0; $i < self::NB_PAY_METHODE; $i++) {
+
+    $paymentMethods = [
+     ['method'=> "Paypal", "icon"=>'fa-brands fa-cc-paypal fs-5'],
+     ['method'=> "Visa", "icon"=>'fa-brands fa-cc-visa fs-5'],
+     ['method'=> "MasterCard", "icon"=>'fa-brands fa-cc-mastercard fs-5'],
+     ['method'=> "Paiement en boutique", "icon"=>'fa-solid fa-cash-register fs-5'],
+    ];
+    $paymentEntities = []; 
+    foreach ($paymentMethods as $methodData) {
       $payment = new Payment();
-
-      $payment->setMethod($faker->creditCardType());
+      $payment->setMethod($methodData['method'])
+              ->setIcon($methodData['icon']);
+  
       $manager->persist($payment);
-      $paymentMethods[] = $payment;
-    }
-
+      $paymentEntities[] = $payment; 
+  }
+  
     // status de commande
 
     $orderStatusNames = ["En attente de traitement", "En cours de traitement", "En attente de paiement", "Prête pour la collecte", "En cours de livraison", "Livré", "Annulé"];
@@ -147,7 +146,7 @@ class UserFixtures extends Fixture
         ->setDelivery($faker->boolean(50))
         ->setDepositDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 week', 'now')))
         ->setRetrieveDate(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('now', '+1 week')))
-        ->setPayment($faker->randomElement($paymentMethods))
+        ->setPayment($faker->randomElement($paymentEntities))
         ->setEmp(!empty($emps) ? $faker->randomElement($emps) : null)
         ->setClient(!empty($clients) ? $faker->randomElement($clients) : null)
         ->setOrderStatus($faker->randomElement($orderStatusList));

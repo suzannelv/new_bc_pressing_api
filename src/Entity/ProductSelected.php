@@ -16,28 +16,26 @@ class ProductSelected
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['productSelected:read'])]
+    #[Groups(['productSelected:read', "order:read"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productSelecteds')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['productSelected:read'])]
+    #[Groups(['productSelected:read, "order:read"'])]
     private ?Product $product = null;
 
 
     #[ORM\ManyToOne(inversedBy: 'productSelecteds')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['productSelected:read'])]
+    #[Groups(['productSelected:read', "order:read"])]
     private ?Material $material = null;
 
     #[ORM\Column]
-    #[Groups(['productSelected:read'])]
-
+    #[Groups(['productSelected:read', "order:read"])]
     private ?float $totalPrice = null;
 
     #[ORM\ManyToMany(targetEntity: ServiceOption::class, inversedBy: 'product')]
-    #[Groups(['productSelected:read'])]
-
+    #[Groups(['productSelected:read', "order:read"])]
     private Collection $serviceOptions;
 
     #[ORM\ManyToOne(inversedBy: 'productSelected')]
@@ -45,6 +43,7 @@ class ProductSelected
     private ?OrderDetail $orderDetail = null;
 
     #[ORM\Column]
+    #[Groups(['productSelected:read', "order:read"])]
     private ?int $quantity = null;
 
     public function __construct()

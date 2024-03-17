@@ -17,4 +17,4 @@ class PriceCalculator
     $totalPrice = $productPrice + $serviceTotalPrice;
     return $totalPrice;
 }
-}
+}  

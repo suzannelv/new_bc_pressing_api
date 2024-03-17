@@ -39,7 +39,6 @@ class OrderDetail
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['productSelected:read', "order:read"])]
-
     private ?\DateTimeInterface $retrieveDate = null;
 
     #[ORM\Column(length: 255)]
@@ -70,6 +69,7 @@ class OrderDetail
     private ?OrderStatus $orderStatus = null;
 
     #[ORM\OneToMany(mappedBy: 'orderDetail', targetEntity: ProductSelected::class)]
+    #[Groups(["order:read"])]
     private Collection $productSelected;
 
     public function __construct()

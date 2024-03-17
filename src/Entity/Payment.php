@@ -26,6 +26,9 @@ class Payment
     #[ORM\OneToMany(mappedBy: 'payment', targetEntity: OrderDetail::class)]
     private Collection $orderDetails;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $icon = null;
+
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -74,6 +77,18 @@ class Payment
                 $orderDetail->setPayment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): static
+    {
+        $this->icon = $icon;
 
         return $this;
     }
