@@ -9,6 +9,7 @@ use App\Entity\Employee;
 use App\Entity\OrderDetail;
 use App\Entity\OrderStatus;
 use App\Entity\Payment;
+use App\Entity\User;
 use App\Entity\ZipCode;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -23,9 +24,10 @@ class UserFixtures extends Fixture
   private const NB_PAY_METHODE = 3;
   public const NB_ORDERS = 10;
   public const ORDER_DETAIL_PREFIX = 'orderDetailList_';
+
+  public function __construct(private string $adminEmail){}
   public function load(ObjectManager $manager): void
   {
-
     $faker = Factory::create("fr_FR");
     // pays
     $country = new Country();
@@ -77,6 +79,7 @@ class UserFixtures extends Fixture
         ->setBirthday($faker->dateTimeBetween('-30 years', 'now'))
         ->setPhoneNumber('0666666666')
         ->setAdress($faker->address())
+        ->setRoles(['ROLE_CLIENT'])
         ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-3 years')))
         ->setClientNumber($faker->numerify('clt-######'))
         ->setZipCode($randomZipCode);
@@ -84,6 +87,19 @@ class UserFixtures extends Fixture
       $clients[] = $client;
     }
 
+    // administrateur
+    $admin = new User();
+    $admin->setFirstname("Bernard")
+          ->setLastname("Shabi")
+          ->setEmail($this->adminEmail)
+          ->setRoles(['ROLE_ADMIN'])
+          ->setPhoneNumber('0462854136')
+          ->setPassword("admin123456")
+          ->setAdress('1 Rue République')
+          ->setZipCode($randomZipCode)
+          ->setCreatedAt(new DateTimeImmutable('2020-01-01'))
+          ->setBirthday(new DateTimeImmutable('1980-02-16'));
+    $manager->persist($admin);
 
     // employées
     $emps = [];
@@ -98,6 +114,7 @@ class UserFixtures extends Fixture
         ->setPhoneNumber('0666666666')
         ->setAdress($faker->address())
         ->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-5 years')))
+        ->setRoles(['ROLE_EMPLOYEE'])
         ->setEmpNumber($faker->numerify('emp-######'))
         ->setAdminRole($faker->boolean(10))
         ->setZipCode($randomZipCode);

@@ -18,10 +18,17 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'admin')]
+
+    public function __construct(private AuthorizationCheckerInterface $authorizationChecker){
+
+    }
+
+    #[Route('/admin', name: 'app_admin')]
     public function index(): Response
     {
         // return parent::index();
@@ -46,14 +53,18 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Mr.U-Smiley Dashbord');
+            ->setTitle('<img src="assets/img/logo.svg" style="margin-right: 20px;">Mr.U-Smiley BO')
+            ->renderContentMaximized();
+        
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Users', 'fa-solid fa-user', User::class);
-        yield MenuItem::linkToCrud('Employées', 'fa-solid fa-user-gear', Employee::class);
+        yield MenuItem::linkToCrud('Utilisateurs', 'fa-solid fa-user', User::class);
+        if($this->authorizationChecker->isGranted('ROLE_ADMIN')){
+            yield MenuItem::linkToCrud('Employées', 'fa-solid fa-user-gear', Employee::class);
+        }
         yield MenuItem::linkToCrud('Clients', 'fa-solid fa-users', Client::class);
         yield MenuItem::linkToCrud('Catégories', 'fa-solid fa-list', Category::class);
         yield MenuItem::linkToCrud('Produits', 'fa-solid fa-shirt', Product::class);

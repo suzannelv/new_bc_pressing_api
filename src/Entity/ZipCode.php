@@ -116,4 +116,9 @@ class ZipCode
 
         return $this;
     }
+    public function __toString()
+    {
+        return $this->zipCode . ' ' . $this->city;
+    }
+
 }
