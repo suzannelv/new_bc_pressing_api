@@ -12,8 +12,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields:['email'], message:"Cet email existe déjà!")]
 #[ORM\InheritanceType("JOINED")]
@@ -72,6 +74,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Groups(["user:read"])]
     protected ?\DateTimeImmutable $createdAt = null;
+
+    #[Groups(["user:read"])]
+    public ?string $contentUrl = null;
+
+    #[Vich\UploadableField(mapping: 'users', fileNameProperty: 'profilUrl')]
+    public ?File $imageFile = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["user:read"])]
@@ -236,6 +244,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getImageFile():?File
+    {
+        return $this->imageFile;
+    }
+
     public function getZipCode(): ?ZipCode
     {
         return $this->zipCode;
@@ -244,9 +257,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setZipCode(?ZipCode $zipCode): static
     {
         $this->zipCode = $zipCode;
-
         return $this;
     }
-
-   
 }

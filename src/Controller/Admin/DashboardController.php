@@ -47,7 +47,7 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        return $this->render('admin/admin.html.twig');
+        return $this->render('bundles/EasyAdminBundle/admin/admin.html.twig');
     }
 
     public function configureDashboard(): Dashboard
@@ -61,7 +61,7 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Utilisateurs', 'fa-solid fa-user', User::class);
+        // yield MenuItem::linkToCrud('Utilisateurs', 'fa-solid fa-user', User::class);
         if($this->authorizationChecker->isGranted('ROLE_ADMIN')){
             yield MenuItem::linkToCrud('Employées', 'fa-solid fa-user-gear', Employee::class);
         }
@@ -70,11 +70,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Produits', 'fa-solid fa-shirt', Product::class);
         yield MenuItem::linkToCrud('Commandes', 'fa-solid fa-truck', OrderDetail::class);
         yield MenuItem::linkToCrud('Paiements', 'fa-solid fa-credit-card', Payment::class);
-        yield MenuItem::linkToCrud('Matières', 'fa-solid fa-cotton-bureau', Material::class);
+        yield MenuItem::linkToCrud('Matières', 'fa-solid fa-recycle', Material::class);
         yield MenuItem::linkToCrud('Services', 'fa-solid fa-jug-detergent', ServiceOption::class);
         yield MenuItem::linkToCrud('Code postale', 'fa-solid fa-map-location-dot', ZipCode::class);
         yield MenuItem::linkToCrud('Status de commande', 'fa-solid fa-hourglass-half', OrderStatus::class);
-
-
     }
 }

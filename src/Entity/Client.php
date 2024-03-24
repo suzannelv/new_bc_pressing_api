@@ -21,8 +21,6 @@ class Client extends User
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: OrderDetail::class)]
     private Collection $orderDetails;
 
-  
-
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -70,4 +68,8 @@ class Client extends User
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->clientNumber;
+    }  
 }

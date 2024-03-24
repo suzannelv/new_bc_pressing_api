@@ -190,5 +190,4 @@ class Product
     {
         return $this->imageFile;
     }
-
 }

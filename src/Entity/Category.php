@@ -130,6 +130,21 @@ class Category
         return $this;
     }
 
-    
+    public function getDisplayName():string
+    {
+       $level = $this->calculateLevel($this, 0);
+       return str_repeat('——', $level) . $this->getName();
+    }
+    public function calculateLevel (?Category $category, int $level):int
+    {
+        if(null === $category->getParent()){
+            return $level;
+        }
+        return $this->calculateLevel($category->getParent(), ++$level);
+    }
+
+    public function __toString(){
+        return $this->name;
+    }
     
 }

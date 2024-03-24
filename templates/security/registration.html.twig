@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mr.U-Smiley Inscription{% endblock %}
+
+{% block body %}
+{{ form_start(form, {'attr': {'class': 'w-full'}}) }}
+<div class='w-full pt-[200px] flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
+     <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <img class="w-8 h-8 mr-2" src="assets/img/logo.svg" alt="logo">
+          Mr.U-Smiley   
+      </a>
+      <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50">
+        {{ form_errors(form) }}
+      </div>
+      {{ form_row(form.firstname) }}
+      {{ form_row(form.lastname) }}
+      {{ form_row(form.birthday) }}
+      {{ form_row(form.email) }}
+      {{ form_row(form.password) }}
+      {{ form_row(form.phoneNumber) }}
+      {{ form_row(form.profilUrl) }}
+      {{ form_row(form.adress) }}
+      {{ form_row(form.zipCode) }}
+  {{ form_end(form) }}
+</div>
+
+{% endblock %}
