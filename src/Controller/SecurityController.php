@@ -51,15 +51,20 @@ class SecurityController extends AbstractController
     {
         $emp = new Employee();
         $emp->setRoles(['ROLE_EMPLOYEE']);
+        $emp->setAdminRole(false);
         $form = $this->createForm(RegisterType::class, $emp);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()) {
-            dd($form->getData());
             $emp = $form->getData();
             $this->addFlash(
                 'success',
                 'Votre compte a bien été créé.'
             );
+            $file = $form->get('profilUrl')->getData();
+            if ($file) {
+                $emp->setImageFile($file);
+                $emp->setUpdatedAt(new \DateTimeImmutable()); 
+            }
 
             $manager->persist($emp);
             $manager->flush();

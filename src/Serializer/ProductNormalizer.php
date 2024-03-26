@@ -3,6 +3,9 @@
 namespace App\Serializer;
 
 use App\Entity\Product;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -14,7 +17,9 @@ final class ProductNormalizer implements NormalizerAwareInterface, NormalizerInt
 
   private const ALREADY_CALLED = 'PRODUCT_NORMALIZER_ALREADY_CALLED';
 
-    public function __construct(private StorageInterface $storage)
+    public function __construct(
+        private StorageInterface $storage
+    )
     {
     }
 
@@ -22,7 +27,7 @@ final class ProductNormalizer implements NormalizerAwareInterface, NormalizerInt
     {
         $context[self::ALREADY_CALLED] = true;
 
-        $object->contentUrl = $this->storage->resolveUri($object, 'imageFile');
+        $object->contentUrl = 'http://localhost:8000' . $this->storage->resolveUri($object, 'imageFile');
 
         return $this->normalizer->normalize($object, $format, $context);
     }

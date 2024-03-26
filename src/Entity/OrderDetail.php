@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
-#[ApiResource(normalizationContext:["groups"=>["order:read"]])]
+#[ApiResource(normalizationContext:["groups"=>["order:read"]], denormalizationContext:["groups" => "order:create"])]
 class OrderDetail
 {
     #[ORM\Id]
@@ -29,16 +29,15 @@ class OrderDetail
     private ?string $comment = null;
 
     #[ORM\Column]
-    #[Groups(['productSelected:read', "order:read"])]
-
+    #[Groups(['productSelected:read', "order:read", "order:create"])]
     private ?bool $delivery = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['productSelected:read', "order:read"])]
+    #[Groups(['productSelected:read', "order:read", "order:create"])]
     private ?\DateTimeInterface $depositDate = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['productSelected:read', "order:read"])]
+    #[Groups(['productSelected:read', "order:read", "order:create"])]
     private ?\DateTimeInterface $retrieveDate = null;
 
     #[ORM\Column(length: 255)]
@@ -50,26 +49,26 @@ class OrderDetail
     private ?string $codePromo = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "order:create"])]
     private ?Client $client = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "order:create"])]
     private ?Employee $emp = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "order:create"])]
     private ?Payment $payment = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["order:read"])]
+    #[Groups(["order:read", "order:create"])]
     private ?OrderStatus $orderStatus = null;
 
-    #[ORM\OneToMany(mappedBy: 'orderDetail', targetEntity: ProductSelected::class)]
-    #[Groups(["order:read"])]
+    #[ORM\OneToMany(mappedBy: 'orderDetail', targetEntity: ProductSelected::class, cascade: ['persist'])]
+    #[Groups(["order:read", "order:create"])]
     private Collection $productSelected;
 
     public function __construct()

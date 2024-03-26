@@ -85,6 +85,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["user:read"])]
     protected ?string $profilUrl = null;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected $updatedAt;
+
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(["order:read", "user:read", "client:me"])]
@@ -242,6 +245,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->profilUrl = $profilUrl;
 
         return $this;
+    }
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
     public function getImageFile():?File

@@ -33,6 +33,7 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
+                default_target_path: app_admin
                 enable_csrf: true
             logout:
                 path: app_logout
@@ -54,14 +55,12 @@ security:
         - { path: ^/api/users, roles: PUBLIC_ACCESS }
         - { path: ^/api/categories, roles: PUBLIC_ACCESS }
         - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
-        # - { path: ^/api, roles: ROLE_ADMIN }
-        # - { path: ^/admin, roles: ROLE_ADMIN|ROLE_EMPLOYEE }
+        - { path: ^/admin, roles: ROLE_EMPLOYEE }
         # - { path: ^/profile, roles: ROLE_USER }
 
-    # role_hierarchy:
-    #     ROLE_ADMIN: [ROLE_USER]
-    #     ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-    #     ROLE_EMPLOYEE: [ROLE_USER]
+    role_hierarchy:
+        ROLE_EMPLOYEE: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_EMPLOYEE]
 
 when@test:
     security:
