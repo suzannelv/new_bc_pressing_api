@@ -243,6 +243,20 @@ class OrderDetail
         return $this;
     }
 
+    // calculer le prix total
+    public function getTotalPrice() :float{
+        $totalPrice = 0;
+        foreach($this->getProductSelected() as $productSelected) {
+            $totalPrice += $productSelected->getTotalPrice();
+        }
+        return $totalPrice;
+    }
+
+    public function getTotalPriceAsString(): string
+    {
+        return sprintf('%.2f €', $this->getTotalPrice());
+    }
+
     public function __toString(): string
     {
         return $this->id ? (string)$this->id : 'n/a';
