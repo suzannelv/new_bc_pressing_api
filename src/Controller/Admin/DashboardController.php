@@ -53,7 +53,8 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('<img src="assets/img/logo.svg" style="margin-right: 20px;">Mr.U-Smiley BO')
+            ->setTitle('<img src="assets/img/logo.svg" style="margin-right: 20px;">Mr.U-Smiley BO <a href="http://localhost:4200/" target=_blank><i class="fa-solid fa-arrow-up-right-from-square"></i> Aller sur le site Front</a>')
+            ->setFaviconPath('favicon.ico')
             ->renderContentMaximized();
         
     }
@@ -61,7 +62,6 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        // yield MenuItem::linkToCrud('Utilisateurs', 'fa-solid fa-user', User::class);
         if($this->authorizationChecker->isGranted('ROLE_ADMIN')){
             yield MenuItem::linkToCrud('Employées', 'fa-solid fa-user-gear', Employee::class);
         }

@@ -84,7 +84,13 @@ class RegisterType extends AbstractType
                 'constraints'=>[
                     new Image([
                         'maxSize'=>'5000k',
-                        'mimeTypesMessage' => 'Le format d\'image est invalide.',
+                        'mimeTypes' =>[
+                            'image/jpeg',
+                            'image/png',
+                            'image/svg',
+                            'image/gif'
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG, GIF, SVG).',
                     ],
                     )
                 ],

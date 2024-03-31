@@ -28,16 +28,19 @@ class OrderDetailCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')
+                    ->setFormTypeOption('disabled', 'disabled'),
             TextField::new('orderNumber')
-                     ->setFormTypeOption('disabled', 'disabled'),
-            DateTimeField::new('createdAt'),
+                    ->setFormTypeOption('disabled', 'disabled'),
+            DateTimeField::new('createdAt')
+                    ->setFormTypeOption('disabled', 'disabled'),
             DateTimeField::new('depositDate'),
             DateTimeField::new('retrieveDate'),
             AssociationField::new('payment')
                             ->setCrudController(PaymentCrudController::class),
             AssociationField::new('client')
-                            ->setCrudController(ClientCrudController::class),
+                            ->setCrudController(ClientCrudController::class)
+                            ->setFormTypeOption('disabled', 'disabled'),
             AssociationField::new('emp')
                             ->setCrudController(EmployeeCrudController::class),
             AssociationField::new('orderStatus')

@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\OrderDetailRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
-#[ApiResource(normalizationContext:["groups"=>["order:read"]], denormalizationContext:["groups" => "order:create"])]
+#[ApiResource(
+    normalizationContext:["groups"=>["order:read"]], 
+    denormalizationContext:["groups" => "order:create"]
+)]
+#[ApiFilter(SearchFilter::class, properties:['client'=>'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['createdAt'=>'DESC'])]
+
 class OrderDetail
 {
     #[ORM\Id]

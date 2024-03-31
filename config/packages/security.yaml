@@ -55,8 +55,8 @@ security:
         - { path: ^/api/users, roles: PUBLIC_ACCESS }
         - { path: ^/api/categories, roles: PUBLIC_ACCESS }
         - { path: ^/api/me, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/profile, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/admin, roles: ROLE_EMPLOYEE }
-        # - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
         ROLE_EMPLOYEE: [ROLE_USER]

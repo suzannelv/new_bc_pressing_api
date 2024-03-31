@@ -11,7 +11,8 @@ Mr.U-Smiley Dashboard
 {% block main %}
     <div class="container d-flex flex-column align-items-center gap-5">
         {% if app.user %}
-        <h2>Bienvenue Administrateur {{app.user.userIdentifier}} </h2>
+        <h2>Bienvenue Administrateur <span class="text-[#e2a954]">{{app.user.userIdentifier}}</span> </h2>
         {% endif %}
+        <img src="https://img.freepik.com/vecteurs-libre/composition-isometrique-lavage-linge-illustration-petits-personnages-humains_1284-54068.jpg?t=st=1711887322~exp=1711890922~hmac=e4eb489af9c6e88f68359d2be4e464f26d24c1786d131b09f870f0d86bf515b6&w=996" alt="bg image">
     </div>
 {% endblock %}
