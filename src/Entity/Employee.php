@@ -17,14 +17,11 @@ class Employee extends User
     #[ORM\Column(length: 255)]
     #[Groups(["order:read"])]
     private ?string $empNumber = null;
-
     #[ORM\Column]
     #[Groups(["order:read"])]
     private ?bool $adminRole = null;
-
     #[ORM\OneToMany(mappedBy: 'emp', targetEntity: OrderDetail::class)]
     private Collection $orderDetails;
-
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
@@ -38,7 +35,6 @@ class Employee extends User
     public function setEmpNumber(string $empNumber): static
     {
         $this->empNumber = $empNumber;
-
         return $this;
     }
 
@@ -50,7 +46,6 @@ class Employee extends User
     public function setAdminRole(bool $adminRole): static
     {
         $this->adminRole = $adminRole;
-
         return $this;
     }
 
@@ -68,7 +63,6 @@ class Employee extends User
             $this->orderDetails->add($orderDetail);
             $orderDetail->setEmp($this);
         }
-
         return $this;
     }
 
@@ -80,7 +74,6 @@ class Employee extends User
                 $orderDetail->setEmp(null);
             }
         }
-
         return $this;
     }
 

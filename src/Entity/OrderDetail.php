@@ -33,10 +33,6 @@ class OrderDetail
     #[Groups(['productSelected:read', "order:read"])]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(["order:read"])]
-    private ?string $comment = null;
-
     #[ORM\Column]
     #[Groups(['productSelected:read', "order:read", "order:create"])]
     private ?bool $delivery = null;
@@ -52,10 +48,6 @@ class OrderDetail
     #[ORM\Column(length: 255)]
     #[Groups(['productSelected:read', "order:read"])]
     private ?string $orderNumber = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["order:read"])]
-    private ?string $codePromo = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderDetails')]
     #[Groups(["order:read", "order:create"])]
@@ -98,18 +90,6 @@ class OrderDetail
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): static
-    {
-        $this->comment = $comment;
 
         return $this;
     }
@@ -158,18 +138,6 @@ class OrderDetail
     public function setOrderNumber(string $orderNumber): static
     {
         $this->orderNumber = $orderNumber;
-
-        return $this;
-    }
-
-    public function getCodePromo(): ?string
-    {
-        return $this->codePromo;
-    }
-
-    public function setCodePromo(?string $codePromo): static
-    {
-        $this->codePromo = $codePromo;
 
         return $this;
     }

@@ -24,7 +24,6 @@ class SubscriberController extends AbstractController
         ObjectManager $manager
     ):Response
     {
-        // revoir ici
         $email = $request->get('email');
         $existingEmail = $newsletterRepository->findOneBy(['email'=>$email]);
         if($existingEmail){

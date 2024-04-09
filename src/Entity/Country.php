@@ -19,12 +19,10 @@ class Country
     #[Groups(["order:read",'zipCode:read','user:read' ])]
 
     private ?int $id = null;
-
     #[ORM\Column(length: 255)]
     #[Groups(["order:read", 'zipCode:read','user:read'])]
 
     private ?string $country = null;
-
     #[ORM\OneToMany(mappedBy: 'country', targetEntity: ZipCode::class)]
     private Collection $zipCodes;
 
@@ -46,7 +44,6 @@ class Country
     public function setCountry(string $country): static
     {
         $this->country = $country;
-
         return $this;
     }
 
@@ -64,7 +61,6 @@ class Country
             $this->zipCodes->add($zipCode);
             $zipCode->setCountry($this);
         }
-
         return $this;
     }
 
@@ -76,7 +72,6 @@ class Country
                 $zipCode->setCountry(null);
             }
         }
-
         return $this;
     }
 }

@@ -26,9 +26,6 @@ class ServiceOption
     #[ORM\ManyToMany(targetEntity: ProductSelected::class, mappedBy: 'serviceOptions')]
     private Collection $product;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $imagePath = null;
-
     public function __construct()
     {
         $this->product = new ArrayCollection();
@@ -83,18 +80,6 @@ class ServiceOption
     public function removeProduct(ProductSelected $product): static
     {
         $this->product->removeElement($product);
-
-        return $this;
-    }
-
-    public function getImagePath(): ?string
-    {
-        return $this->imagePath;
-    }
-
-    public function setImagePath(?string $imagePath): static
-    {
-        $this->imagePath = $imagePath;
 
         return $this;
     }

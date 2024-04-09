@@ -17,15 +17,12 @@ class Client extends User
     #[ORM\Column(length: 255)]
     #[Groups(["order:read"])]
      private ?string $clientNumber = null;
-
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: OrderDetail::class)]
     private Collection $orderDetails;
-
     public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
     }
-
 
     /**
      * @return Collection<int, OrderDetail>
@@ -65,7 +62,6 @@ class Client extends User
     public function setClientNumber(string $clientNumber): static
     {
         $this->clientNumber = $clientNumber;
-
         return $this;
     }
     public function __toString(): string

@@ -35,7 +35,6 @@ class UserFixtures extends Fixture
     $manager->persist($country);
 
     // code postale et ville
- 
     $zipCodesData = [
       ['city'=> 'Lyon', 'zipCode'=>'69001'],
       ['city'=> 'Lyon', 'zipCode'=>'69002'],
@@ -130,6 +129,7 @@ class UserFixtures extends Fixture
      ['method'=> "MasterCard", "icon"=>'fa-brands fa-cc-mastercard fs-5'],
      ['method'=> "Paiement en boutique", "icon"=>'fa-solid fa-cash-register fs-5'],
     ];
+
     $paymentEntities = []; 
     foreach ($paymentMethods as $methodData) {
       $payment = new Payment();
@@ -141,21 +141,17 @@ class UserFixtures extends Fixture
   }
   
     // status de commande
-
     $orderStatusNames = ["En attente de traitement", "En cours de traitement", "En attente de paiement", "Prête pour la collecte", "En cours de livraison", "Livré", "Annulé"];
     $orderStatusList = [];
     foreach ($orderStatusNames as $statusName) {
       $orderStatus = new OrderStatus();
       $orderStatus->setStatus($statusName);
-
       $manager->persist($orderStatus);
       $orderStatusList[] = $orderStatus;
 
     }
 
-
     // commande info
-
     for ($i = 0; $i < self::NB_ORDERS; $i++) {
       $orderDetail = new OrderDetail();
       $orderDetail->setOrderNumber($faker->regexify('[A-Z]{5}[0-4]{3}'))

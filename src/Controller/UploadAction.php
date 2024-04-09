@@ -30,8 +30,6 @@ final class UploadAction extends AbstractController
             throw new BadRequestHttpException("La photo du produit est obligatoire");
         }
 
-        // $uploadImage->move($this->getParameter('kernel.project_dir') . '/public/uploads/products', $uploadImage->getClientOriginalName());
-
         $product = new Product();
 
         $categories = $this->categoryRepository->findAll();
@@ -45,8 +43,6 @@ final class UploadAction extends AbstractController
             ->setProductStatus($statuses[0]);
 
         $product->imageFile = $uploadImage;
-
-
         return $product;
     }
 }

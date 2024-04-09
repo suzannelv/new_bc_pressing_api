@@ -18,27 +18,21 @@ class Category
     #[ORM\Column]
     #[Groups(['products:read', 'productSelected:read'])]
     private ?int $id = null;
-
     #[ORM\Column(length: 255)]
     #[Groups(['products:read', 'productSelected:read'])]
     private ?string $name = null;
-
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'child')]
     #[ORM\JoinColumn(nullable: true)]
     private ?self $parent = null;
-
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     private Collection $child;
-
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
     private Collection $products;
 
-   
     public function __construct()
     {
         $this->child = new ArrayCollection();
         $this->products = new ArrayCollection();
-     
     }
 
     public function getId(): ?int
@@ -54,7 +48,6 @@ class Category
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -66,7 +59,6 @@ class Category
     public function setParent(?self $parent): static
     {
         $this->parent = $parent;
-
         return $this;
     }
 
@@ -84,7 +76,6 @@ class Category
             $this->child->add($child);
             $child->setParent($this);
         }
-
         return $this;
     }
 
@@ -96,7 +87,6 @@ class Category
                 $child->setParent(null);
             }
         }
-
         return $this;
     }
 
@@ -114,7 +104,6 @@ class Category
             $this->products->add($product);
             $product->setCategory($this);
         }
-
         return $this;
     }
 
@@ -126,7 +115,6 @@ class Category
                 $product->setCategory(null);
             }
         }
-
         return $this;
     }
 
@@ -142,9 +130,7 @@ class Category
         }
         return $this->calculateLevel($category->getParent(), ++$level);
     }
-
     public function __toString(){
         return $this->name;
     }
-    
 }

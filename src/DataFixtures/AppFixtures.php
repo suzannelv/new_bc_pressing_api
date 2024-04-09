@@ -28,7 +28,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         $allProductStatus = [];
         $productStatusName = ["Nouveau", "Usagé", "Abîmé"];
         foreach ($productStatusName as $statusName) {
-
             $status = new ProductStatus();
             $status->setStatusName($statusName);
             $manager->persist($status);
@@ -359,7 +358,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
         }
 
         // matériel
-
         $materialInfos = [
             [
                 "name" => "Coton",
@@ -387,20 +385,17 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             ],
 
         ];
+
         $allMaterials = [];
         foreach ($materialInfos as $materialInfo) {
             $material = new Material();
             $material->setName($materialInfo["name"])
             ->setCoefficentPrice($materialInfo['coefficentPrice']);
-
-            
-            $manager->persist($material);
-            
+            $manager->persist($material);    
             $allMaterials[] = $material;
         }
 
         //service options
-
         $serviceInfos = [
             [
                 "name" => "Lavage",
@@ -425,8 +420,7 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             [
                 "name" => "Retouche",
                 "coefficentPrice" => 0.2
-            ],
-         
+            ],  
         ];
 
         $allServices = [];
@@ -442,7 +436,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
 
         // produits sélectionnés
         $priceCalculator = new PriceCalculator();
-
         $orderDetails = [];
         for ($i = 0; $i < UserFixtures::NB_ORDERS; $i++) {
             $orderDetails[] = $this->getReference(UserFixtures::ORDER_DETAIL_PREFIX . $i);
@@ -474,8 +467,6 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($productSelected);
             $allProductSelected[] = $productSelected;
         }
-
-
         $manager->flush();
     }
 
@@ -485,5 +476,4 @@ class AppFixtures extends Fixture implements DependentFixtureInterface
             UserFixtures::class,
         ];
     }
-
 }
