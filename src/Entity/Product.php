@@ -21,8 +21,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    normalizationContext:['groups'=>['products:read']],
-    
+    normalizationContext:['groups'=>['products:read']],  
     operations: [
         new Get(),
         new GetCollection(),

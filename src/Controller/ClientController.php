@@ -24,17 +24,17 @@ class ClientController extends AbstractController
     }
 
     $clientData = [
-     'id'         =>$user->getId(),
+     'id'           =>$user->getId(),
      'clientNumber' => $user->getClientNumber(),
-     'email'      =>$user->getEmail(), 
-     'firstname'  =>$user->getFirstname(),
-     'lastname'   =>$user->getLastname(),
-     'phoneNumber'=>$user->getPhoneNumber(),
-     'adress'     =>$user->getAdress(),
-     'zipCodeIRI' =>$user->getZipCode(),
-     'zipCode'    =>[
-        'zipCode'=>$user->getZipCode()->getZipCode(),
-        'city'=>$user->getZipCode()->getCity()
+     'email'        =>$user->getEmail(), 
+     'firstname'    =>$user->getFirstname(),
+     'lastname'     =>$user->getLastname(),
+     'phoneNumber'  =>$user->getPhoneNumber(),
+     'adress'       =>$user->getAdress(),
+     'zipCodeIRI'   =>$user->getZipCode(),
+     'zipCode'      =>[
+        'zipCode'   =>$user->getZipCode()->getZipCode(),
+        'city'      =>$user->getZipCode()->getCity()
      ],
     ];
 
